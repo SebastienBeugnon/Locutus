@@ -1,7 +1,8 @@
 /**
  * Copyright (C) 2013
+ * E.E.A.P. Coste Rousse <http://www.adages.net/costerousse/>
 	Sébastien Beugnon <sebastien.beugnon.pro[at]gmail.com>,
-	E.E.A.P. Coste Rousse <http://www.adages.net/costerousse/>
+	
 
 
     This file is part of Locutus.
