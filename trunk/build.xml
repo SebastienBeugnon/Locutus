@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="Cp1252"?>
+<!--ANT 1.7 is required -->
+
+<project basedir="." default="BUILD" name="buildLocutusGeneral">
+
+
+	<!-- ********************************************************** -->
+	<!-- *                                                        * -->
+	<!-- * Où trouver les éléments essentiels ?                   * -->
+	<!-- *                                                        * -->
+	<!-- ********************************************************** -->
+	<property name="version" value="1.1.016" />
+
+	<property name="src_dir" value="src" />
+	<property name="build_dir" value="build" />
+	<property name="classes_dir" value="${build_dir}" />
+	<property name="lib_dir" value="lib" />
+	<property name="bin_dir" value="bin" />
+
+	<property name="javadoc_dir" value="javadoc" />
+	<property name="javadoc_check_dir" value="${build_dir}/javadoc_check" />
+	<property name="javadoc_zip" value="javadoc.zip" />
+
+	<path id="libs">
+		<fileset dir="lib" includes="*.jar" />
+	</path>
+	<path id="core">
+		<fileset dir="${build_dir}" includes="locutus-core.jar" />
+	</path>
+
+	<!-- ********************************************************** -->
+	<!-- *                                                        * -->
+	<!-- * Builds srcs, jars, demos                               * -->
+	<!-- *                                                        * -->
+	<!-- ********************************************************** -->
+	<target name="BUILD">
+
+		<antcall target="clean" />
+
+		<antcall target="generate_core" />
+
+		<antcall target="generate_locutus" />
+
+		<antcall target="generate_lpc" />
+
+		<antcall target="generate_lpv" />
+
+		<antcall target="generate_locutus_mono" />
+
+	</target>
+
+
+	<target name="clean">
+		<delete dir="${build_dir}" failonerror="false" />
+		<delete dir="${classes_dir}" failonerror="false" />
+		<mkdir dir="${build_dir}" />
+		<mkdir dir="${classes_dir}" />
+	</target>
+
+	<target name="generate_core">
+		<antcall target="compile_src_core" />
+		<antcall target="build_jar_core" />
+	</target>
+
+	<target name="generate_locutus">
+		<antcall target="compile_src_locutus" />
+		<antcall target="build_jar_locutus" />
+	</target>
+
+	<target name="generate_lpc">
+		<antcall target="compile_src_lpc" />
+		<antcall target="build_jar_lpc" />
+	</target>
+	<target name="generate_lpv">
+		<antcall target="compile_src_lpv" />
+		<antcall target="build_jar_lpv" />
+	</target>
+	<target name="generate_locutus_mono">
+		<antcall target="compile_src_mono" />
+		<antcall target="build_jar_mono" />
+	</target>
+
+
+	<!-- ********************************************************** -->
+	<!-- *                                                        * -->
+	<!-- * Compile et construit le noyau commun                   * -->
+	<!-- *                                                        * -->
+	<!-- ********************************************************** -->
+
+	<target name="compile_src_core">
+		<mkdir dir="${classes_dir}/locutus-core" />
+		<javac debug="true" destdir="${classes_dir}/locutus-core" includeantruntime="false">
+			<src path="${src_dir}/locutus-core" />
+			<classpath refid="libs" />
+		</javac>
+		<echo>Les sources du noyau locutus sont compilées ! (locutus-core)</echo>
+	</target>
+
+	<target name="build_jar_core">
+		<jar destfile="${build_dir}/locutus-core.jar">
+			<fileset dir="${classes_dir}/locutus-core" />
+		</jar>
+		<echo>le noyau locutus a été construit ! (locutus-core.jar)</echo>
+	</target>
+
+	<!-- ********************************************************** -->
+	<!-- *                                                        * -->
+	<!-- * Compile et construit le programme Locutus              * -->
+	<!-- *                                                        * -->
+	<!-- ********************************************************** -->
+
+	<target name="compile_src_locutus">
+		<mkdir dir="${classes_dir}/locutus" />
+		<javac debug="true" destdir="${classes_dir}/locutus" includeantruntime="false">
+			<src path="${src_dir}/locutus" />
+			<classpath refid="libs" />
+			<classpath refid="core" />
+		</javac>
+		<echo>Les sources du programme Locutus ont été compilé !</echo>
+	</target>
+
+	<target name="build_jar_locutus">
+		<jar destfile="${build_dir}/locutus.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.Launcher" />
+				<attribute name="Class-Path" value=". lib/jcifs-1.3.17.jar lib/jl1.0.1.jar lib/jdom-2.0.4.jar locutus-core.jar" />
+			</manifest>
+			<fileset dir="${classes_dir}/locutus" />
+		</jar>
+		<echo>Locutus a été construit ! (locutus.jar)</echo>
+	</target>
+
+	<!-- ********************************************************** -->
+	<!-- *                                                        * -->
+	<!-- * Compile et construit l'outil de gestion des concepts   * -->
+	<!-- *                                                        * -->
+	<!-- ********************************************************** -->
+
+	<target name="compile_src_lpc">
+		<mkdir dir="${classes_dir}/lpc" />
+		<javac debug="true" destdir="${classes_dir}/lpc" includeantruntime="false">
+			<src path="${src_dir}/lpc" />
+			<classpath refid="libs" />
+			<classpath refid="core" />
+		</javac>
+		<echo>Les sources de l'outil de gestion des concepts ont été compilé !</echo>
+	</target>
+	<target name="build_jar_lpc">
+		<jar destfile="${build_dir}/lpc.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.LauncherConcept" />
+				<attribute name="Class-Path" value=". lib/jcifs-1.3.17.jar lib/jl1.0.1.jar lib/jdom-2.0.4.jar locutus-core.jar" />
+			</manifest>
+			<fileset dir="${classes_dir}/lpc" />
+
+		</jar>
+		<echo>L'outil de gestion des concepts a été construit ! (lpc.jar) </echo>
+	</target>
+
+	<!-- ********************************************************** -->
+	<!-- *                                                        * -->
+	<!-- * Compile et construit l'outil de gestion des voix       * -->
+	<!-- *                                                        * -->
+	<!-- ********************************************************** -->
+
+	<target name="compile_src_lpv">
+		<mkdir dir="${classes_dir}/lpv" />
+		<javac debug="true" destdir="${classes_dir}/lpv" includeantruntime="false">
+			<src path="${src_dir}/lpv" />
+			<classpath refid="libs" />
+			<classpath refid="core" />
+		</javac>
+		<echo>Les sources de l'outil de gestion des voix ont été compilé !</echo>
+	</target>
+
+	<target name="build_jar_lpv">
+		<jar destfile="${build_dir}/lpv.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.LauncherVoix" />
+				<attribute name="Class-Path" value=". lib/jcifs-1.3.17.jar lib/jl1.0.1.jar lib/jdom-2.0.4.jar locutus-core.jar" />
+			</manifest>
+			<fileset dir="${classes_dir}/lpv" />
+		</jar>
+		<echo>L'outil de gestion des voix a été construit ! (lpv.jar) </echo>
+	</target>
+
+	<!-- ********************************************************** -->
+	<!-- *                                                        * -->
+	<!-- * Compile et construit le programme Locutus mono         * -->
+	<!-- *                                                        * -->
+	<!-- ********************************************************** -->
+	<target name="compile_src_mono">
+		<mkdir dir="${classes_dir}/locutus-mono" />
+		<javac debug="true" destdir="${classes_dir}/locutus-mono" includeantruntime="false">
+			<src path="${src_dir}/locutus-mono" />
+			<classpath refid="libs" />
+			<classpath refid="core" />
+		</javac>
+		<echo>Les sources de Locutus mono-utilisateur ont été compilé !</echo>
+	</target>
+
+	<target name="build_jar_mono">
+		<jar destfile="${build_dir}/locutus-mono.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.LauncherMono" />
+				<attribute name="Class-Path" value=". lib/jcifs-1.3.17.jar lib/jl1.0.1.jar lib/jdom-2.0.4.jar locutus-core.jar" />
+			</manifest>
+			<fileset dir="${classes_dir}/locutus-mono" />
+		</jar>
+		<echo>Locutus mono-utilisateur a été construit ! (locutus-mono.jar)</echo>
+	</target>
+
+</project>
+
+
+

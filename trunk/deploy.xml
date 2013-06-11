@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="Cp1252"?>
+<!--ANT 1.7 is required -->
+
+<project basedir="." default="all" name="LocutusGeneraldeploy">
+
+	<property name="lib_dir" value="lib" />
+	<property name="res_dir" value="ressources" />
+	<property name="local_dir" value="local" />
+	<property name="build_dir" value="build" />
+	<!-- Modifier ceci pour choisir où on doit copier le résultat pour un déploiement -->
+	<property name="deploy_dir" value="C:\Users\Beugnon\Desktop\Locutus" />
+
+
+	<target name="all">
+		<ant antfile="build.xml" />
+		
+		
+		<mkdir dir="${deploy_dir}" />
+		<copy todir="${deploy_dir}">
+			<fileset dir="${build_dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${deploy_dir}/${lib_dir}" />
+		<copy todir="${deploy_dir}/${lib_dir}">
+			<fileset dir="${lib_dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${deploy_dir}/${res_dir}" />
+		<copy todir="${deploy_dir}/${res_dir}">
+			<fileset dir="${res_dir}">
+			</fileset>
+		</copy>
+
+		<mkdir dir="${deploy_dir}/${local_dir}" />
+		<copy todir="${deploy_dir}/${local_dir}">
+			<fileset dir="${local_dir}">
+			</fileset>
+		</copy>
+
+	</target>
+</project>
