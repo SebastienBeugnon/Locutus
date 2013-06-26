@@ -330,7 +330,7 @@ public class ModuleGestionOptionsProgramme extends ModuleInterne {
 	public void lancerOutilsAdministrationConcepts() {
 		Runtime runtime = Runtime.getRuntime();
 		try {
-			runtime.exec("java -jar lpc.jar &");
+			runtime.exec("./lpc.exe &");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -343,7 +343,7 @@ public class ModuleGestionOptionsProgramme extends ModuleInterne {
 		Runtime runtime = Runtime.getRuntime();
 
 		try {
-			runtime.exec("java -jar lpv.jar &");
+			runtime.exec("./lpv.exe &");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

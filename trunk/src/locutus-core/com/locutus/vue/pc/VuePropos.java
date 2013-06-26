@@ -23,13 +23,21 @@
  */
 package com.locutus.vue.pc;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import com.locutus.controleurs.internes.autres.ModulePropos;
 import com.locutus.modeles.OptionsProgramme;
+
 
 /**
  * @author Sebastien Beugnon
@@ -57,6 +65,7 @@ public class VuePropos extends VuePanneau {
 	 */
 	@Override
 	public void charger() {
+		super.setLayout(new BorderLayout());
 		JButton retour = new JButton("Retour au menu principal");
 		retour.setFont(OptionsProgramme.getOptionsCourantes().getPoliceTexte());
 		retour.addActionListener(new ActionListener() {
@@ -67,7 +76,30 @@ public class VuePropos extends VuePanneau {
 
 			}
 		});
-		this.add(retour);
+		JPanel top = new JPanel();
+		top.add(retour);
+		super.add(top,BorderLayout.NORTH);
+		
+		JTextArea jta = new JTextArea();
+		jta.setRows(64);
+		try {
+			Scanner scn = new Scanner(new File("COPYING.txt"));
+			while(scn.hasNext()){
+				jta.append(scn.nextLine());
+				jta.append("\n");
+			}
+			scn.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		jta.setEditable(false);
+		
+		super.add(new JPanel(),BorderLayout.WEST);
+		super.add(new JPanel(),BorderLayout.EAST);
+		super.add(new JPanel(),BorderLayout.SOUTH);
+		JScrollPane jsp = new JScrollPane(jta);
+		super.add(jsp,BorderLayout.CENTER);
+		
 	}
 
 	/*

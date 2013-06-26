@@ -157,7 +157,14 @@ public class ModuleCoursDefilement extends ModuleCours {
 		// On affecte la liste à afficher.
 		affectation();
 		// On ajoute la tâche à exécuter.
-
+		try {
+			getSemaphore().acquire();
+			//On dessiner la liste à l'écran
+			getVue().afficherChoix(getListeVisible());
+			getSemaphore().release();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		addTask();
 	}
 
